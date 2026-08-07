@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Report Found Item{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <h3 class="fw-bold mb-4 text-success"><i class="bi bi-check-circle"></i> Report a Found Item</h3>
+                    <form method="POST" enctype="multipart/form-data" novalidate>
+                        {{ form.hidden_tag() }}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                {{ form.item_name.label(class="form-label") }}
+                                {{ form.item_name(class="form-control" + (" is-invalid" if form.item_name.errors else "")) }}
+                                {% for err in form.item_name.errors %}<div class="invalid-feedback">{{ err }}</div>{% endfor %}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.category.label(class="form-label") }}
+                                {{ form.category(class="form-select") }}
+                            </div>
+                            <div class="col-12">
+                                {{ form.description.label(class="form-label") }}
+                                {{ form.description(class="form-control" + (" is-invalid" if form.description.errors else ""), rows=3) }}
+                                {% for err in form.description.errors %}<div class="invalid-feedback">{{ err }}</div>{% endfor %}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.location_found.label(class="form-label") }}
+                                {{ form.location_found(class="form-control" + (" is-invalid" if form.location_found.errors else ""), placeholder="e.g. Cafeteria, Block A") }}
+                                {% for err in form.location_found.errors %}<div class="invalid-feedback">{{ err }}</div>{% endfor %}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.date_found.label(class="form-label") }}
+                                {{ form.date_found(class="form-control" + (" is-invalid" if form.date_found.errors else ""), type="date") }}
+                                {% for err in form.date_found.errors %}<div class="invalid-feedback">{{ err }}</div>{% endfor %}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.finder_name.label(class="form-label") }}
+                                {{ form.finder_name(class="form-control" + (" is-invalid" if form.finder_name.errors else "")) }}
+                                {% for err in form.finder_name.errors %}<div class="invalid-feedback">{{ err }}</div>{% endfor %}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.contact_number.label(class="form-label") }}
+                                {{ form.contact_number(class="form-control" + (" is-invalid" if form.contact_number.errors else ""), placeholder="10-digit number") }}
+                                {% for err in form.contact_number.errors %}<div class="invalid-feedback">{{ err }}</div>{% endfor %}
+                            </div>
+                            <div class="col-12">
+                                {{ form.image.label(class="form-label") }}
+                                {{ form.image(class="form-control" + (" is-invalid" if form.image.errors else "")) }}
+                                {% for err in form.image.errors %}<div class="invalid-feedback">{{ err }}</div>{% endfor %}
+                            </div>
+                        </div>
+                        <div class="mt-4">{{ form.submit(class="btn btn-success px-4 fw-semibold") }}</div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

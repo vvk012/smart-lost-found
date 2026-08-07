@@ -1,0 +1,16 @@
+<div class="col-md-3 col-lg-2 admin-sidebar p-0">
+    <div class="list-group list-group-flush">
+        <a href="{{ url_for('admin.admin_dashboard') }}" class="list-group-item admin-nav-link {{ 'active' if request.endpoint == 'admin.admin_dashboard' }}">
+            <i class="bi bi-speedometer2"></i> Dashboard
+        </a>
+        <a href="{{ url_for('admin.admin_users') }}" class="list-group-item admin-nav-link {{ 'active' if request.endpoint == 'admin.admin_users' }}">
+            <i class="bi bi-people-fill"></i> Users
+        </a>
+        <a href="{{ url_for('admin.admin_lost_reports') }}" class="list-group-item admin-nav-link {{ 'active' if request.endpoint == 'admin.admin_lost_reports' }}">
+            <i class="bi bi-exclamation-octagon-fill"></i> Lost Reports
+        </a>
+        <a href="{{ url_for('admin.admin_found_reports') }}" class="list-group-item admin-nav-link {{ 'active' if request.endpoint == 'admin.admin_found_reports' }}">
+            <i class="bi bi-box-seam-fill"></i> Found Reports
+        </a>
+    </div>
+</div>

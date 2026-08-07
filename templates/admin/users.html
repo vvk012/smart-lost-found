@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Admin · Users{% endblock %}
+
+{% block content %}
+<div class="container-fluid my-4">
+    <div class="row">
+        {% include "admin/_sidebar.html" %}
+        <div class="col-md-9 col-lg-10">
+            <h3 class="fw-bold mb-4"><i class="bi bi-people-fill"></i> Registered Users ({{ users|length }})</h3>
+            <div class="table-responsive">
+                <table class="table table-hover bg-white shadow-sm align-middle">
+                    <thead class="table-dark">
+                        <tr><th>#</th><th>Name</th><th>Email</th><th>Phone</th><th>Lost Reports</th><th>Found Reports</th><th>Joined</th></tr>
+                    </thead>
+                    <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ user.full_name }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.phone }}</td>
+                            <td>{{ user.lost_items|length }}</td>
+                            <td>{{ user.found_items|length }}</td>
+                            <td>{{ user.created_at.strftime('%d %b %Y') }}</td>
+                        </tr>
+                    {% else %}
+                        <tr><td colspan="7" class="text-center text-muted">No registered users yet.</td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

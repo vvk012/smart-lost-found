@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}Dashboard · Campus Lost & Found{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <h3 class="fw-bold mb-4"><i class="bi bi-speedometer2 text-primary"></i> Welcome, {{ current_user.full_name }}</h3>
+
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3">
+            <div class="card stat-card shadow-sm border-0 text-center h-100">
+                <div class="card-body">
+                    <i class="bi bi-exclamation-octagon-fill text-danger fs-3"></i>
+                    <h4 class="fw-bold mt-1 mb-0">{{ total_lost }}</h4>
+                    <small class="text-muted">Total Lost</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card stat-card shadow-sm border-0 text-center h-100">
+                <div class="card-body">
+                    <i class="bi bi-box-seam-fill text-success fs-3"></i>
+                    <h4 class="fw-bold mt-1 mb-0">{{ total_found }}</h4>
+                    <small class="text-muted">Total Found</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card stat-card shadow-sm border-0 text-center h-100">
+                <div class="card-body">
+                    <i class="bi bi-person-lines-fill text-warning fs-3"></i>
+                    <h4 class="fw-bold mt-1 mb-0">{{ my_lost }}</h4>
+                    <small class="text-muted">My Lost Reports</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card stat-card shadow-sm border-0 text-center h-100">
+                <div class="card-body">
+                    <i class="bi bi-person-check-fill text-info fs-3"></i>
+                    <h4 class="fw-bold mt-1 mb-0">{{ my_found }}</h4>
+                    <small class="text-muted">My Found Reports</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex flex-wrap gap-2 mb-4">
+        <a href="{{ url_for('items.report_lost') }}" class="btn btn-danger"><i class="bi bi-exclamation-circle"></i> Report Lost Item</a>
+        <a href="{{ url_for('items.report_found') }}" class="btn btn-success"><i class="bi bi-check-circle"></i> Report Found Item</a>
+        <a href="{{ url_for('items.search') }}" class="btn btn-outline-primary"><i class="bi bi-search"></i> Search Items</a>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-6">
+            <h5 class="fw-bold mb-3"><i class="bi bi-clock-history"></i> Recently Reported Lost</h5>
+            {% if recent_lost %}
+                {% for item in recent_lost %}
+                <a href="{{ url_for('items.item_details', item_type='lost', item_id=item.id) }}" class="text-decoration-none">
+                <div class="card mb-2 border-0 shadow-sm item-list-card">
+                    <div class="card-body py-2 d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong class="text-dark">{{ item.item_name }}</strong>
+                            <div class="small text-muted">{{ item.category }} &middot; {{ item.location_lost }}</div>
+                        </div>
+                        <span class="badge status-badge status-{{ item.status|lower }}">{{ item.status }}</span>
+                    </div>
+                </div>
+                </a>
+                {% endfor %}
+            {% else %}
+                <p class="text-muted small">No lost items reported yet.</p>
+            {% endif %}
+        </div>
+        <div class="col-md-6">
+            <h5 class="fw-bold mb-3"><i class="bi bi-clock-history"></i> Recently Reported Found</h5>
+            {% if recent_found %}
+                {% for item in recent_found %}
+                <a href="{{ url_for('items.item_details', item_type='found', item_id=item.id) }}" class="text-decoration-none">
+                <div class="card mb-2 border-0 shadow-sm item-list-card">
+                    <div class="card-body py-2 d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong class="text-dark">{{ item.item_name }}</strong>
+                            <div class="small text-muted">{{ item.category }} &middot; {{ item.location_found }}</div>
+                        </div>
+                        <span class="badge status-badge status-{{ item.status|lower }}">{{ item.status }}</span>
+                    </div>
+                </div>
+                </a>
+                {% endfor %}
+            {% else %}
+                <p class="text-muted small">No found items reported yet.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

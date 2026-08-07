@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Admin · Found Reports{% endblock %}
+
+{% block content %}
+<div class="container-fluid my-4">
+    <div class="row">
+        {% include "admin/_sidebar.html" %}
+        <div class="col-md-9 col-lg-10">
+            <h3 class="fw-bold mb-4"><i class="bi bi-box-seam-fill text-success"></i> Found Item Reports ({{ reports|length }})</h3>
+            <div class="table-responsive">
+                <table class="table table-hover bg-white shadow-sm align-middle">
+                    <thead class="table-dark">
+                        <tr><th>Item</th><th>Category</th><th>Location</th><th>Date</th><th>Reported By</th><th>Contact</th><th>Status</th><th>Actions</th></tr>
+                    </thead>
+                    <tbody>
+                    {% for item in reports %}
+                        <tr>
+                            <td><a href="{{ url_for('items.item_details', item_type='found', item_id=item.id) }}">{{ item.item_name }}</a></td>
+                            <td>{{ item.category }}</td>
+                            <td>{{ item.location_found }}</td>
+                            <td>{{ item.date_found.strftime('%d %b %Y') }}</td>
+                            <td>{{ item.finder_name }}</td>
+                            <td>{{ item.contact_number }}</td>
+                            <td><span class="badge status-badge status-{{ item.status|lower }}">{{ item.status }}</span></td>
+                            <td class="d-flex gap-1">
+                                {% if item.status != 'Returned' %}
+                                <form method="POST" action="{{ url_for('admin.mark_found_returned', item_id=item.id) }}">
+                                    <button class="btn btn-sm btn-outline-success" title="Mark Returned"><i class="bi bi-check-lg"></i></button>
+                                </form>
+                                {% endif %}
+                                <form method="POST" action="{{ url_for('admin.delete_found', item_id=item.id) }}" onsubmit="return confirm('Delete this report? This cannot be undone.');">
+                                    <button class="btn btn-sm btn-outline-danger" title="Delete"><i class="bi bi-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr><td colspan="8" class="text-center text-muted">No found item reports yet.</td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

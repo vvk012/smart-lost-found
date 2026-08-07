@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Login · Campus Lost & Found{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-sm border-0 auth-card">
+                <div class="card-body p-4">
+                    <h3 class="fw-bold text-center mb-4"><i class="bi bi-box-arrow-in-right text-primary"></i> Student Login</h3>
+                    <form method="POST" novalidate>
+                        {{ form.hidden_tag() }}
+                        <div class="mb-3">
+                            {{ form.email.label(class="form-label") }}
+                            {{ form.email(class="form-control" + (" is-invalid" if form.email.errors else "")) }}
+                            {% for err in form.email.errors %}<div class="invalid-feedback">{{ err }}</div>{% endfor %}
+                        </div>
+                        <div class="mb-4">
+                            {{ form.password.label(class="form-label") }}
+                            {{ form.password(class="form-control" + (" is-invalid" if form.password.errors else "")) }}
+                            {% for err in form.password.errors %}<div class="invalid-feedback">{{ err }}</div>{% endfor %}
+                        </div>
+                        {{ form.submit(class="btn btn-primary w-100 fw-semibold") }}
+                    </form>
+                    <p class="text-center mt-3 mb-1 small">New here? <a href="{{ url_for('auth.register') }}">Create an account</a></p>
+                    <p class="text-center mb-0 small"><a href="{{ url_for('admin.admin_login') }}" class="text-muted"><i class="bi bi-shield-lock"></i> Admin login</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

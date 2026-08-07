@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Admin Login{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card shadow-sm border-0 auth-card">
+                <div class="card-body p-4">
+                    <h3 class="fw-bold text-center mb-4"><i class="bi bi-shield-lock-fill text-dark"></i> Admin Login</h3>
+                    <form method="POST" novalidate>
+                        {{ form.hidden_tag() }}
+                        <div class="mb-3">
+                            {{ form.username.label(class="form-label") }}
+                            {{ form.username(class="form-control" + (" is-invalid" if form.username.errors else "")) }}
+                            {% for err in form.username.errors %}<div class="invalid-feedback">{{ err }}</div>{% endfor %}
+                        </div>
+                        <div class="mb-4">
+                            {{ form.password.label(class="form-label") }}
+                            {{ form.password(class="form-control" + (" is-invalid" if form.password.errors else "")) }}
+                            {% for err in form.password.errors %}<div class="invalid-feedback">{{ err }}</div>{% endfor %}
+                        </div>
+                        {{ form.submit(class="btn btn-dark w-100 fw-semibold") }}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

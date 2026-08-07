@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block title %}Search Items{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <h3 class="fw-bold mb-4"><i class="bi bi-search text-primary"></i> Search Lost & Found Items</h3>
+
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <form method="GET">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        {{ form.keyword.label(class="form-label small") }}
+                        {{ form.keyword(class="form-control", placeholder="e.g. Wallet") }}
+                    </div>
+                    <div class="col-md-3">
+                        {{ form.category.label(class="form-label small") }}
+                        {{ form.category(class="form-select") }}
+                    </div>
+                    <div class="col-md-2">
+                        {{ form.location.label(class="form-label small") }}
+                        {{ form.location(class="form-control", placeholder="e.g. Library") }}
+                    </div>
+                    <div class="col-md-2">
+                        {{ form.status.label(class="form-label small") }}
+                        {{ form.status(class="form-select") }}
+                    </div>
+                    <div class="col-md-2">
+                        {{ form.item_type.label(class="form-label small") }}
+                        {{ form.item_type(class="form-select") }}
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3 fw-semibold"><i class="bi bi-search"></i> Search</button>
+                <a href="{{ url_for('items.search') }}" class="btn btn-outline-secondary mt-3">Clear</a>
+            </form>
+        </div>
+    </div>
+
+    {% if searched %}
+        <h5 class="fw-bold text-danger"><i class="bi bi-exclamation-octagon"></i> Lost Items ({{ lost_results|length }})</h5>
+        <div class="row g-3 mb-4">
+            {% for item in lost_results %}
+            <div class="col-md-4">
+                <a href="{{ url_for('items.item_details', item_type='lost', item_id=item.id) }}" class="text-decoration-none text-dark">
+                <div class="card h-100 border-0 shadow-sm item-card">
+                    {% if item.image_filename %}
+                        <img src="{{ url_for('static', filename='uploads/' ~ item.image_filename) }}" class="card-img-top item-thumb" alt="{{ item.item_name }}">
+                    {% else %}
+                        <div class="item-thumb-placeholder"><i class="bi bi-image fs-1"></i></div>
+                    {% endif %}
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <strong>{{ item.item_name }}</strong>
+                            <span class="badge status-badge status-{{ item.status|lower }}">{{ item.status }}</span>
+                        </div>
+                        <div class="small text-muted mt-1">{{ item.category }} &middot; {{ item.location_lost }}</div>
+                        <div class="small text-muted">{{ item.date_lost.strftime('%d %b %Y') }}</div>
+                    </div>
+                </div>
+                </a>
+            </div>
+            {% else %}
+                <p class="text-muted">No matching lost items.</p>
+            {% endfor %}
+        </div>
+
+        <h5 class="fw-bold text-success"><i class="bi bi-box-seam"></i> Found Items ({{ found_results|length }})</h5>
+        <div class="row g-3">
+            {% for item in found_results %}
+            <div class="col-md-4">
+                <a href="{{ url_for('items.item_details', item_type='found', item_id=item.id) }}" class="text-decoration-none text-dark">
+                <div class="card h-100 border-0 shadow-sm item-card">
+                    {% if item.image_filename %}
+                        <img src="{{ url_for('static', filename='uploads/' ~ item.image_filename) }}" class="card-img-top item-thumb" alt="{{ item.item_name }}">
+                    {% else %}
+                        <div class="item-thumb-placeholder"><i class="bi bi-image fs-1"></i></div>
+                    {% endif %}
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <strong>{{ item.item_name }}</strong>
+                            <span class="badge status-badge status-{{ item.status|lower }}">{{ item.status }}</span>
+                        </div>
+                        <div class="small text-muted mt-1">{{ item.category }} &middot; {{ item.location_found }}</div>
+                        <div class="small text-muted">{{ item.date_found.strftime('%d %b %Y') }}</div>
+                    </div>
+                </div>
+                </a>
+            </div>
+            {% else %}
+                <p class="text-muted">No matching found items.</p>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-muted">Use the filters above to search across all lost and found reports.</p>
+    {% endif %}
+</div>
+{% endblock %}
