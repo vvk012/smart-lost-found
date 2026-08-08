@@ -85,3 +85,10 @@ body {
 }
 .admin-nav-link:hover { background: #262c4a; color: #fff; }
 .admin-nav-link.active { background: var(--campus-primary); color: #fff; }
+.college-tagline {
+    font-size: 0.65rem;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    opacity: 0.8;
+    text-transform: uppercase;
+}
