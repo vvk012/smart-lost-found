@@ -2,6 +2,8 @@ import os
 import uuid
 from werkzeug.utils import secure_filename
 from flask import current_app
+from flask_mail import Message
+from extensions import mail
 
 
 def save_item_image(file_storage):
@@ -26,3 +28,24 @@ def save_item_image(file_storage):
     save_path = os.path.join(current_app.config["UPLOAD_FOLDER"], unique_name)
     file_storage.save(save_path)
     return unique_name
+
+
+def send_report_confirmation(to_email, recipient_name, item_name, item_type):
+    """Sends a confirmation email after a lost/found report is submitted.
+
+    Wrapped in try/except by the caller — a failed email should never
+    break the report-submission flow (e.g. if SMTP creds aren't set up
+    yet, or the campus wifi blocks outgoing SMTP).
+    """
+    verb = "lost" if item_type == "lost" else "found"
+    subject = f"Report Received: {item_name} ({verb})"
+    body = (
+        f"Hi {recipient_name},\n\n"
+        f"Your {verb} item report for \"{item_name}\" has been received "
+        f"on the Campus Lost & Found Portal.\n\n"
+        f"You can view and manage all your reports anytime from the "
+        f"'My Reports' section of your dashboard.\n\n"
+        f"— Campus Lost & Found Portal, ITS Engineering College"
+    )
+    msg = Message(subject=subject, recipients=[to_email], body=body)
+    mail.send(msg)
