@@ -14,9 +14,13 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark sticky-top campus-navbar">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="{{ url_for('main.index') }}">
-            <i class="bi bi-search-heart-fill me-1"></i> Campus Lost & Found
-        </a>
+    <a class="navbar-brand fw-bold d-flex align-items-center" href="{{ url_for('main.index') }}">
+    <i class="bi bi-search-heart-fill me-2"></i>
+    <span>
+        Campus Lost & Found
+        <span class="d-block college-tagline">ITS Engineering College</span>
+    </span>
+</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
             <span class="navbar-toggler-icon"></span>
         </button>
