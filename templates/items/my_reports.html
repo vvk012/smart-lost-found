@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}My Reports{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <h3 class="fw-bold mb-4"><i class="bi bi-person-lines-fill text-primary"></i> My Reports</h3>
+
+    <h5 class="fw-bold text-danger mt-4"><i class="bi bi-exclamation-octagon"></i> My Lost Item Reports ({{ my_lost|length }})</h5>
+    <div class="table-responsive mb-4">
+        <table class="table table-hover bg-white shadow-sm align-middle">
+            <thead class="table-dark">
+                <tr><th>Item</th><th>Category</th><th>Location</th><th>Date</th><th>Status</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+            {% for item in my_lost %}
+                <tr>
+                    <td><a href="{{ url_for('items.item_details', item_type='lost', item_id=item.id) }}">{{ item.item_name }}</a></td>
+                    <td>{{ item.category }}</td>
+                    <td>{{ item.location_lost }}</td>
+                    <td>{{ item.date_lost.strftime('%d %b %Y') }}</td>
+                    <td><span class="badge status-badge status-{{ item.status|lower }}">{{ item.status }}</span></td>
+                    <td class="d-flex gap-1">
+                        {% if item.status != 'Returned' %}
+                        <form method="POST" action="{{ url_for('items.mark_my_lost_returned', item_id=item.id) }}">
+                            <button class="btn btn-sm btn-outline-success" title="Mark as Found/Returned"><i class="bi bi-check-lg"></i></button>
+                        </form>
+                        {% endif %}
+                        <form method="POST" action="{{ url_for('items.delete_my_lost', item_id=item.id) }}" onsubmit="return confirm('Delete this report?');">
+                            <button class="btn btn-sm btn-outline-danger" title="Delete"><i class="bi bi-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr><td colspan="6" class="text-center text-muted">You haven't reported any lost items yet.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <h5 class="fw-bold text-success"><i class="bi bi-box-seam"></i> My Found Item Reports ({{ my_found|length }})</h5>
+    <div class="table-responsive">
+        <table class="table table-hover bg-white shadow-sm align-middle">
+            <thead class="table-dark">
+                <tr><th>Item</th><th>Category</th><th>Location</th><th>Date</th><th>Status</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+            {% for item in my_found %}
+                <tr>
+                    <td><a href="{{ url_for('items.item_details', item_type='found', item_id=item.id) }}">{{ item.item_name }}</a></td>
+                    <td>{{ item.category }}</td>
+                    <td>{{ item.location_found }}</td>
+                    <td>{{ item.date_found.strftime('%d %b %Y') }}</td>
+                    <td><span class="badge status-badge status-{{ item.status|lower }}">{{ item.status }}</span></td>
+                    <td class="d-flex gap-1">
+                        {% if item.status != 'Returned' %}
+                        <form method="POST" action="{{ url_for('items.mark_my_found_returned', item_id=item.id) }}">
+                            <button class="btn btn-sm btn-outline-success" title="Mark as Returned"><i class="bi bi-check-lg"></i></button>
+                        </form>
+                        {% endif %}
+                        <form method="POST" action="{{ url_for('items.delete_my_found', item_id=item.id) }}" onsubmit="return confirm('Delete this report?');">
+                            <button class="btn btn-sm btn-outline-danger" title="Delete"><i class="bi bi-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr><td colspan="6" class="text-center text-muted">You haven't reported any found items yet.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
