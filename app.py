@@ -1,8 +1,7 @@
 import os
 from flask import Flask, render_template
 from config import Config
-from extensions import db, bcrypt, login_manager
-
+from extensions import db, bcrypt, login_manager, mail
 
 def create_app(config_class=Config):
     app = Flask(__name__)
@@ -14,6 +13,7 @@ def create_app(config_class=Config):
     db.init_app(app)
     bcrypt.init_app(app)
     login_manager.init_app(app)
+    mail.init_app(app)
 
     # Import models so SQLAlchemy knows about them before create_all().
     from models import User, Admin, LostItem, FoundItem  # noqa: F401
