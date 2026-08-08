@@ -22,10 +22,10 @@ with app.app_context():
 
     if not Admin.query.filter_by(username="vivek@620").first():
         hashed_pw = bcrypt.generate_password_hash("vivek@123").decode("utf-8")
-        admin = Admin(username="admin", password_hash=hashed_pw)
+        admin = Admin(username="vivek@620", password_hash=hashed_pw)
         db.session.add(admin)
         db.session.commit()
-        print("Default admin created -> username: admin | password: admin123")
+        print("Default admin created -> username: vivek@620 | password: vivek@123")
     else:
         print("Admin account already exists, skipping.")
 
