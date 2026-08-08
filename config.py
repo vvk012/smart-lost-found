@@ -17,3 +17,17 @@ class Config:
     UPLOAD_FOLDER = os.path.join(BASE_DIR, "static", "uploads")
     MAX_CONTENT_LENGTH = 3 * 1024 * 1024  # 3 MB max upload size
     ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "webp"}
+    # Email settings — used to send report-confirmation emails.
+    # Set MAIL_USERNAME / MAIL_PASSWORD as environment variables; never
+    # hardcode real credentials in this file.
+    # For Gmail: use an "App Password", not your normal password
+    # (Google Account -> Security -> App Passwords).
+    MAIL_SERVER = os.environ.get("MAIL_SERVER", "smtp.gmail.com")
+    MAIL_PORT = int(os.environ.get("MAIL_PORT", 587))
+    MAIL_USE_TLS = True
+    MAIL_USERNAME = os.environ.get("MAIL_USERNAME")
+    MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
+    MAIL_DEFAULT_SENDER = os.environ.get("MAIL_USERNAME")
+    # If no MAIL_USERNAME is configured, suppress actual sending so the
+    # app still works out of the box without crashing on missing creds.
+    MAIL_SUPPRESS_SEND = os.environ.get("MAIL_USERNAME") is None
