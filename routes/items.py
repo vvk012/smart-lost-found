@@ -4,7 +4,7 @@ from flask_login import login_required, current_user
 from extensions import db
 from models import LostItem, FoundItem
 from forms import LostItemForm, FoundItemForm, SearchForm
-from utils import save_item_image
+from utils import save_item_image, send_report_confirmation
 
 items_bp = Blueprint("items", __name__)
 
@@ -28,6 +28,12 @@ def report_lost():
         )
         db.session.add(item)
         db.session.commit()
+
+        try:
+            send_report_confirmation(current_user.email, current_user.full_name, item.item_name, "lost")
+        except Exception:
+            pass  # Email is a nice-to-have; never block the user on SMTP issues.
+
         flash("Lost item reported successfully. We hope you find it soon!", "success")
         return redirect(url_for("items.item_details", item_type="lost", item_id=item.id))
 
@@ -53,6 +59,12 @@ def report_found():
         )
         db.session.add(item)
         db.session.commit()
+
+        try:
+            send_report_confirmation(current_user.email, current_user.full_name, item.item_name, "found")
+        except Exception:
+            pass
+
         flash("Found item reported successfully. Thank you for helping the campus!", "success")
         return redirect(url_for("items.item_details", item_type="found", item_id=item.id))
 
@@ -109,3 +121,65 @@ def item_details(item_type, item_id):
     else:
         abort(404)
     return render_template("items/item_details.html", item=item, item_type=item_type)
+
+
+@items_bp.route("/my-reports")
+@login_required
+def my_reports():
+    my_lost = LostItem.query.filter_by(user_id=current_user.id).order_by(LostItem.created_at.desc()).all()
+    my_found = FoundItem.query.filter_by(user_id=current_user.id).order_by(FoundItem.created_at.desc()).all()
+    return render_template("items/my_reports.html", my_lost=my_lost, my_found=my_found)
+
+
+def _own_lost_item_or_403(item_id):
+    item = LostItem.query.get_or_404(item_id)
+    if item.user_id != current_user.id:
+        abort(403)
+    return item
+
+
+def _own_found_item_or_403(item_id):
+    item = FoundItem.query.get_or_404(item_id)
+    if item.user_id != current_user.id:
+        abort(403)
+    return item
+
+
+@items_bp.route("/my-reports/lost/<int:item_id>/delete", methods=["POST"])
+@login_required
+def delete_my_lost(item_id):
+    item = _own_lost_item_or_403(item_id)
+    db.session.delete(item)
+    db.session.commit()
+    flash(f'"{item.item_name}" deleted.', "info")
+    return redirect(url_for("items.my_reports"))
+
+
+@items_bp.route("/my-reports/found/<int:item_id>/delete", methods=["POST"])
+@login_required
+def delete_my_found(item_id):
+    item = _own_found_item_or_403(item_id)
+    db.session.delete(item)
+    db.session.commit()
+    flash(f'"{item.item_name}" deleted.', "info")
+    return redirect(url_for("items.my_reports"))
+
+
+@items_bp.route("/my-reports/lost/<int:item_id>/mark-returned", methods=["POST"])
+@login_required
+def mark_my_lost_returned(item_id):
+    item = _own_lost_item_or_403(item_id)
+    item.status = "Returned"
+    db.session.commit()
+    flash(f'Great news! "{item.item_name}" marked as returned.', "success")
+    return redirect(url_for("items.my_reports"))
+
+
+@items_bp.route("/my-reports/found/<int:item_id>/mark-returned", methods=["POST"])
+@login_required
+def mark_my_found_returned(item_id):
+    item = _own_found_item_or_403(item_id)
+    item.status = "Returned"
+    db.session.commit()
+    flash(f'"{item.item_name}" marked as returned.', "success")
+    return redirect(url_for("items.my_reports"))
