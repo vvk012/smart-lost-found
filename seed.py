@@ -20,8 +20,8 @@ app = create_app()
 with app.app_context():
     db.create_all()
 
-    if not Admin.query.filter_by(username="admin").first():
-        hashed_pw = bcrypt.generate_password_hash("admin123").decode("utf-8")
+    if not Admin.query.filter_by(username="vivek@620").first():
+        hashed_pw = bcrypt.generate_password_hash("vivek@123").decode("utf-8")
         admin = Admin(username="admin", password_hash=hashed_pw)
         db.session.add(admin)
         db.session.commit()
