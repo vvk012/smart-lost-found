@@ -6,9 +6,16 @@ BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 def _normalize_db_url(url):
     """Some providers (Render, Heroku-style) hand out URLs starting with
     'postgres://', but modern SQLAlchemy requires 'postgresql://'.
-    This rewrites it automatically so no manual editing is needed."""
-    if url and url.startswith("postgres://"):
-        return url.replace("postgres://", "postgresql://", 1)
+    Also, we installed psycopg (v3), but SQLAlchemy's default dialect
+    for a plain 'postgresql://' URL is psycopg2 — so we make the
+    driver explicit as 'postgresql+psycopg://' to match what's
+    actually installed."""
+    if not url:
+        return url
+    if url.startswith("postgres://"):
+        url = url.replace("postgres://", "postgresql://", 1)
+    if url.startswith("postgresql://"):
+        url = url.replace("postgresql://", "postgresql+psycopg://", 1)
     return url
 
 
