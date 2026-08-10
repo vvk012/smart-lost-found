@@ -32,7 +32,7 @@ def admin_login():
     if form.validate_on_submit():
         form = AdminLoginForm()
         if form.validate_on_submit():
-            print(f"DEBUG >> username received: [{form.username.data}] | password received: [{form.password.data}]")
+
             admin = Admin.query.filter_by(username=form.username.data.strip()).first()
         admin = Admin.query.filter_by(username=form.username.data.strip()).first()
         if admin and bcrypt.check_password_hash(admin.password_hash, form.password.data):

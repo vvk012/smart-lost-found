@@ -2,3 +2,4 @@
 #   from models import User, LostItem, FoundItem, Admin
 from models.user import User, Admin
 from models.item import LostItem, FoundItem
+from models.claim import Claim
