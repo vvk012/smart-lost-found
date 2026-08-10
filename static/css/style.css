@@ -772,3 +772,26 @@ a {
 .claim-box .btn {
     padding: 10px 18px;
 }
+/* Make form fields clearly visible with a solid border, since the
+   default Bootstrap border can look almost invisible on some screens. */
+.form-control,
+.form-select {
+    border: 1.5px solid #b9c0d4;
+    border-radius: 8px;
+    padding: 0.6rem 0.85rem;
+}
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--campus-primary);
+    box-shadow: 0 0 0 0.2rem rgba(41, 82, 227, 0.15);
+}
+.form-control::placeholder {
+    color: #9aa4c2;
+}
+.form-label {
+    font-weight: 600;
+    color: #3a4155;
+    margin-bottom: 0.35rem;
+}
+
+
