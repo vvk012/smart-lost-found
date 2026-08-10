@@ -793,5 +793,20 @@ a {
     color: #3a4155;
     margin-bottom: 0.35rem;
 }
+/* Force-visible buttons — protects against dark-mode auto-inversion
+   or partial stylesheet loads making buttons blend into the page. */
+.btn-primary {
+    background-color: var(--campus-primary) !important;
+    border-color: var(--campus-primary) !important;
+    color: #ffffff !important;
+}
+.btn-primary:hover {
+    background-color: var(--campus-primary-dark) !important;
+    border-color: var(--campus-primary-dark) !important;
+    color: #ffffff !important;
+}
+.btn-danger { color: #ffffff !important; }
+.btn-success { color: #ffffff !important; }
+.btn-dark { color: #ffffff !important; }
 
 
