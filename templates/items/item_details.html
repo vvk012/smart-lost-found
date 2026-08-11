@@ -69,7 +69,7 @@
                     information will only be used to verify ownership.
                 </p>
 
-                <a href="#" class="btn btn-primary">
+                <a href="{{ url_for('items.claim_item', item_id=item.id) }}" class="btn btn-primary">
                     <i class="bi bi-shield-check me-1"></i>
                     Claim This Item
                 </a>
@@ -82,6 +82,38 @@
         Please log in to claim this item.
     </div>
 {% endif %}
+             {% if item_type == 'found' %}
+                        {% if item.status == 'Pending' and current_user.is_authenticated and current_user.id != item.user_id %}
+                            <hr>
+                            <div class="p-3 rounded-3" style="background:#eef1fb;">
+                                <h5 class="fw-bold"><i class="bi bi-patch-question-fill text-primary"></i> Is this your item?</h5>
+                                <p class="text-muted small mb-3">You can submit a claim. Your description will be shown to the finder to verify ownership.</p>
+                                <a href="{{ url_for('items.claim_found', item_id=item.id) }}" class="btn btn-primary fw-semibold">
+                                    <i class="bi bi-shield-check"></i> Claim This Item
+                                </a>
+                            </div>
+                        {% elif item.status == 'Pending' and not current_user.is_authenticated %}
+                            <hr>
+                            <div class="p-3 rounded-3" style="background:#eef1fb;">
+                                <h5 class="fw-bold"><i class="bi bi-patch-question-fill text-primary"></i> Is this your item?</h5>
+                                <p class="text-muted small mb-3">Log in to submit a claim for this item.</p>
+                                <a href="{{ url_for('auth.login') }}" class="btn btn-primary fw-semibold"><i class="bi bi-box-arrow-in-right"></i> Log In to Claim</a>
+                            </div>
+                        {% elif item.status == 'Claimed' and current_user.is_authenticated and current_user.id == item.user_id %}
+                            <hr>
+                            <div class="p-3 rounded-3" style="background:#d6e4ff;">
+                                <h5 class="fw-bold"><i class="bi bi-person-check-fill text-primary"></i> Claimed by {{ item.claimant.full_name }}</h5>
+                                <p class="mb-2"><strong>Their message:</strong> {{ item.claim_message }}</p>
+                                <p class="mb-0"><strong>Contact:</strong> <a href="tel:{{ item.claimant.phone }}">{{ item.claimant.phone }}</a></p>
+                            </div>
+                        {% elif item.status == 'Claimed' %}
+                            <hr>
+                            <div class="alert alert-info mb-0">
+                                <i class="bi bi-info-circle"></i> This item has already been claimed by someone. Waiting for handover.
+                            </div>
+                        {% endif %}
+                    {% endif %}
+
                     <a href="{{ url_for('items.search') }}" class="btn btn-outline-primary mt-4"><i class="bi bi-arrow-left"></i> Back to Search</a>
                 </div>
             </div>
