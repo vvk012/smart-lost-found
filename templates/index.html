@@ -2,30 +2,50 @@
 {% block title %}Campus Lost & Found{% endblock %}
 
 {% block content %}
-<section class="hero-section text-white">
-    <div class="container py-5 text-center">
-        <h1 class="display-5 fw-bold mb-3"><i class="bi bi-search-heart-fill"></i> Lost Something? Found Something?</h1>
-   <p class="badge bg-light text-dark px-3 py-2 mb-3 fw-semibold">ITS Engineering College, Greater Noida</p>
-<p class="lead mb-4">A single, centralized place for our campus to report and recover lost items — no more scattered WhatsApp groups and notice-board photos.</p>
-        <div class="d-flex justify-content-center gap-2 flex-wrap">
-            {% if current_user.is_authenticated %}
-                <a href="{{ url_for('items.report_lost') }}" class="btn btn-light btn-lg fw-semibold"><i class="bi bi-exclamation-circle"></i> Report Lost Item</a>
-                <a href="{{ url_for('items.report_found') }}" class="btn btn-outline-light btn-lg fw-semibold"><i class="bi bi-check-circle"></i> Report Found Item</a>
-            {% else %}
-                <a href="{{ url_for('auth.register') }}" class="btn btn-light btn-lg fw-semibold"><i class="bi bi-person-plus"></i> Get Started</a>
-                <a href="{{ url_for('items.search') }}" class="btn btn-outline-light btn-lg fw-semibold"><i class="bi bi-search"></i> Browse Items</a>
-            {% endif %}
+<section class="hero-section text-white position-relative overflow-hidden">
+    <div class="hero-glow hero-glow-1"></div>
+    <div class="hero-glow hero-glow-2"></div>
+    <div class="container py-5 position-relative">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-8 mx-auto text-center">
+                <span class="hero-badge d-inline-flex align-items-center gap-2 mb-3">
+                    <i class="bi bi-shield-check"></i> Built for our campus, by a student
+                </span>
+                <h1 class="display-5 fw-bold mb-3">
+                    Lost your <span id="rotatingWord" class="rotating-word">ID card</span>?
+                    <br class="d-none d-md-block">We'll help you get it back.
+                </h1>
+                <p class="lead mb-4 hero-subtext">
+                    One centralized place for the whole campus to report and recover lost items —
+                    no more scattered WhatsApp groups and notice-board photos.
+                </p>
+                <div class="d-flex justify-content-center gap-2 flex-wrap mb-4">
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('items.report_lost') }}" class="btn btn-light btn-lg fw-semibold"><i class="bi bi-exclamation-circle"></i> Report Lost Item</a>
+                        <a href="{{ url_for('items.report_found') }}" class="btn btn-outline-light btn-lg fw-semibold"><i class="bi bi-check-circle"></i> Report Found Item</a>
+                    {% else %}
+                        <a href="{{ url_for('auth.register') }}" class="btn btn-light btn-lg fw-semibold"><i class="bi bi-person-plus"></i> Get Started Free</a>
+                        <a href="{{ url_for('items.search') }}" class="btn btn-outline-light btn-lg fw-semibold"><i class="bi bi-search"></i> Browse Items</a>
+                    {% endif %}
+                </div>
+                <div class="d-flex justify-content-center gap-4 flex-wrap hero-trust small">
+                    <span><i class="bi bi-lock-fill me-1"></i> Secure student login</span>
+                    <span><i class="bi bi-geo-alt-fill me-1"></i> Campus-only reports</span>
+                    <span><i class="bi bi-lightning-charge-fill me-1"></i> Report in under a minute</span>
+                </div>
+            </div>
         </div>
     </div>
 </section>
 
 <div class="container my-5">
+    <!-- Live stats -->
     <div class="row g-4 text-center">
         <div class="col-md-4">
             <div class="card stat-card h-100 shadow-sm border-0">
                 <div class="card-body">
                     <i class="bi bi-exclamation-octagon-fill fs-1 text-danger"></i>
-                    <h2 class="fw-bold mt-2">{{ total_lost }}</h2>
+                    <h2 class="fw-bold mt-2 counter" data-target="{{ total_lost }}">0</h2>
                     <p class="text-muted mb-0">Lost Items Reported</p>
                 </div>
             </div>
@@ -34,7 +54,7 @@
             <div class="card stat-card h-100 shadow-sm border-0">
                 <div class="card-body">
                     <i class="bi bi-box-seam-fill fs-1 text-success"></i>
-                    <h2 class="fw-bold mt-2">{{ total_found }}</h2>
+                    <h2 class="fw-bold mt-2 counter" data-target="{{ total_found }}">0</h2>
                     <p class="text-muted mb-0">Found Items Reported</p>
                 </div>
             </div>
@@ -43,35 +63,105 @@
             <div class="card stat-card h-100 shadow-sm border-0">
                 <div class="card-body">
                     <i class="bi bi-hand-thumbs-up-fill fs-1 text-primary"></i>
-                    <h2 class="fw-bold mt-2">{{ total_returned }}</h2>
+                    <h2 class="fw-bold mt-2 counter" data-target="{{ total_returned }}">0</h2>
                     <p class="text-muted mb-0">Items Returned to Owners</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="row mt-5 g-4">
-        <div class="col-md-4">
-            <div class="card h-100 border-0 shadow-sm text-center p-3">
-                <i class="bi bi-1-circle-fill fs-2 text-primary mb-2"></i>
-                <h5 class="fw-bold">Report</h5>
-                <p class="text-muted small mb-0">Lost or found an ID card, wallet, charger, or anything else on campus? Report it in under a minute.</p>
+    <!-- Features -->
+    <div class="text-center mt-5 pt-3">
+        <span class="section-kicker">Everything you need</span>
+        <h2 class="fw-bold">One portal, every campus feature</h2>
+    </div>
+    <div class="row mt-4 g-4">
+        <div class="col-md-6 col-lg-4">
+            <div class="feature-card h-100 p-4">
+                <div class="feature-icon bg-danger-subtle text-danger"><i class="bi bi-exclamation-circle-fill"></i></div>
+                <h5 class="fw-bold mt-3">Report a Lost Item</h5>
+                <p class="text-muted small mb-0">Lost your ID, wallet, charger or anything else on campus? Log it in under a minute with a photo and last-seen location.</p>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card h-100 border-0 shadow-sm text-center p-3">
-                <i class="bi bi-2-circle-fill fs-2 text-primary mb-2"></i>
-                <h5 class="fw-bold">Search</h5>
-                <p class="text-muted small mb-0">Search by item name, category, location, or date to check if someone has already reported it.</p>
+        <div class="col-md-6 col-lg-4">
+            <div class="feature-card h-100 p-4">
+                <div class="feature-icon bg-success-subtle text-success"><i class="bi bi-check-circle-fill"></i></div>
+                <h5 class="fw-bold mt-3">Report a Found Item</h5>
+                <p class="text-muted small mb-0">Picked up something that isn't yours? Report it so the owner can find it and reconnect with their belongings.</p>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card h-100 border-0 shadow-sm text-center p-3">
-                <i class="bi bi-3-circle-fill fs-2 text-primary mb-2"></i>
-                <h5 class="fw-bold">Connect</h5>
-                <p class="text-muted small mb-0">View the reporter's contact details directly on the item page and reconnect with your belongings.</p>
+        <div class="col-md-6 col-lg-4">
+            <div class="feature-card h-100 p-4">
+                <div class="feature-icon bg-primary-subtle text-primary"><i class="bi bi-search"></i></div>
+                <h5 class="fw-bold mt-3">Smart Search &amp; Filters</h5>
+                <p class="text-muted small mb-0">Search by item name, category, location or status to instantly check if your item has already been reported.</p>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="feature-card h-100 p-4">
+                <div class="feature-icon bg-warning-subtle text-warning"><i class="bi bi-card-list"></i></div>
+                <h5 class="fw-bold mt-3">Detailed Item Pages</h5>
+                <p class="text-muted small mb-0">Every report gets its own page with photo, description and the reporter's contact details for a quick reconnect.</p>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="feature-card h-100 p-4">
+                <div class="feature-icon bg-info-subtle text-info"><i class="bi bi-shield-lock-fill"></i></div>
+                <h5 class="fw-bold mt-3">Secure Student Accounts</h5>
+                <p class="text-muted small mb-0">Every report is tied to a registered account, so the whole campus stays accountable and reports are trustworthy.</p>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="feature-card h-100 p-4">
+                <div class="feature-icon bg-secondary-subtle text-secondary"><i class="bi bi-speedometer2"></i></div>
+                <h5 class="fw-bold mt-3">Admin Oversight</h5>
+                <p class="text-muted small mb-0">Campus admins get a dashboard to monitor all lost &amp; found reports, manage users and keep records clean.</p>
             </div>
         </div>
     </div>
+
+    <!-- How it works -->
+    <div class="text-center mt-5 pt-4">
+        <span class="section-kicker">Simple by design</span>
+        <h2 class="fw-bold">How it works</h2>
+    </div>
+    <div class="row mt-4 g-4">
+        <div class="col-md-4">
+            <div class="step-card h-100 text-center p-4">
+                <div class="step-number">1</div>
+                <h5 class="fw-bold mt-2">Report</h5>
+                <p class="text-muted small mb-0">Lost or found something on campus? Sign in and file a report with a photo, description and location in under a minute.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="step-card h-100 text-center p-4">
+                <div class="step-number">2</div>
+                <h5 class="fw-bold mt-2">Search</h5>
+                <p class="text-muted small mb-0">Browse or filter all open reports by item name, category, location or date to see if a match already exists.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="step-card h-100 text-center p-4">
+                <div class="step-number">3</div>
+                <h5 class="fw-bold mt-2">Connect</h5>
+                <p class="text-muted small mb-0">Open the item page, view the reporter's contact details, and reconnect directly to get your belongings back.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Final CTA -->
+    <div class="cta-banner mt-5 p-5 text-center text-white">
+        <h3 class="fw-bold mb-2">Lost something today?</h3>
+        <p class="mb-4 opacity-75">Don't wait for a WhatsApp forward — report it directly and let the campus help you find it.</p>
+        {% if current_user.is_authenticated %}
+            <a href="{{ url_for('items.report_lost') }}" class="btn btn-light btn-lg fw-semibold"><i class="bi bi-exclamation-circle"></i> Report Lost Item</a>
+        {% else %}
+            <a href="{{ url_for('auth.register') }}" class="btn btn-light btn-lg fw-semibold"><i class="bi bi-person-plus"></i> Create Free Account</a>
+        {% endif %}
+    </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/landing.js') }}"></script>
 {% endblock %}
