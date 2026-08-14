@@ -50,16 +50,6 @@ class ClaimForm(FlaskForm):
     contact_number = StringField("Your Contact Number", validators=[DataRequired(), PHONE_VALIDATOR])
     submit = SubmitField("Submit Claim")
 
-    class ClaimForm(FlaskForm):
-        message = TextAreaField(
-            "Describe your item to verify ownership",
-            validators=[DataRequired(), Length(min=15, max=500)],
-            render_kw={"placeholder": "E.g. It's a black charger with a red sticker on the cable, "
-                                      "I lost it near the classroom on 10 Aug."}
-        )
-        submit = SubmitField("Submit Claim")
-
-    class SearchForm(FlaskForm):
 class SearchForm(FlaskForm):
     class Meta:
         csrf = False  # search is a GET form, CSRF protection isn't needed

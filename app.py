@@ -16,7 +16,7 @@ def create_app(config_class=Config):
     mail.init_app(app)
 
     # Import models so SQLAlchemy knows about them before create_all().
-    from models import User, Admin, LostItem, FoundItem, claim # noqa: F401
+    from models import User, Admin, LostItem, FoundItem, Claim  # noqa: F401
 
     from routes.auth import auth_bp
     from routes.main import main_bp
